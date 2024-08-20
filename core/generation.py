@@ -4,7 +4,7 @@ import logger
 
 console = logger.Logger("out.log", "Map generator")
 
-def generate_random_map(width, height, nb_monster, nb_tresor, difficulty):
+def generate_random_map(width: int, height: int, nb_monster: int, nb_tresor: int, difficulty: int) -> list[list[str]]:
     console.info("Generating random map...")
     dungeon_map = [["#" for _ in range(width)] for _ in range(height)]
     for _ in range(5):  # Créer 5 pièces aléatoires
@@ -32,7 +32,7 @@ def generate_random_map(width, height, nb_monster, nb_tresor, difficulty):
     return connected
 
 
-def find_open_areas(dungeon_map):
+def find_open_areas(dungeon_map: list[list[str]]) -> list[tuple[int, int]]:
     open_areas = []
     for y, row in enumerate(dungeon_map):
         for x, tile in enumerate(row):
@@ -41,7 +41,7 @@ def find_open_areas(dungeon_map):
     return open_areas
 
 
-def connect_points(dungeon_map, points):
+def connect_points(dungeon_map: list[list[str]], points: list[tuple[int, int]]) -> list[list[str]]:
     for i in range(len(points) - 1):
         x1, y1 = points[i]
         x2, y2 = points[i + 1]
@@ -59,7 +59,7 @@ def connect_points(dungeon_map, points):
     return dungeon_map
 
 
-def add_monster(dungeon_map, nb_monster, difficulty):
+def add_monster(dungeon_map: list[list[str]], nb_monster: int, difficulty: int) -> list[list[str]]:
     while count_monsters(dungeon_map) < nb_monster:
         x = random.randint(0, len(dungeon_map[0]) - 1)
         y = random.randint(0, len(dungeon_map) - 1)
@@ -74,7 +74,7 @@ def add_monster(dungeon_map, nb_monster, difficulty):
     return dungeon_map
 
 
-def add_tresor(dungeon_map, nb_tresor):
+def add_tresor(dungeon_map: list[list[str]], nb_tresor: int) -> list[list[str]]:
     while count_tresor(dungeon_map) < nb_tresor:
         x = random.randint(0, len(dungeon_map[0]) - 1)
         y = random.randint(0, len(dungeon_map) - 1)
@@ -84,14 +84,14 @@ def add_tresor(dungeon_map, nb_tresor):
     return dungeon_map
 
 
-def count_tresor(dungeon_map):
+def count_tresor(dungeon_map: list[list[str]]) -> int:
     count = 0
     for row in dungeon_map:
         count += row.count("T")
     return count
 
 
-def count_monsters(dungeon_map):
+def count_monsters(dungeon_map: list[list[str]]) -> int:
     count = 0
     for row in dungeon_map:
         count += row.count("M")

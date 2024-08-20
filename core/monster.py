@@ -1,7 +1,7 @@
 import random
 import func
 
-def move(dungeon_map):
+def move(dungeon_map: list[list[str]]) -> list[list[str]]:
     directions = {"up": (0, -1), "down": (0, 1), "left": (-1, 0), "right": (1, 0)}
 
     # Crée une liste des positions des monstres

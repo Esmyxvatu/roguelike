@@ -18,7 +18,7 @@ level = 1
 console = l.Logger("out.log", "Main processus")
 
 
-def getInfo(dungeon_map):
+def getInfo(dungeon_map: list[list[str]]) -> str:
     global monster_health
     text = ""
 
@@ -49,14 +49,14 @@ def getInfo(dungeon_map):
     return text
 
 
-def find_player_position(dungeon_map):
+def find_player_position(dungeon_map: list[list[str]]) -> tuple[int, int]:
     for y, row in enumerate(dungeon_map):
         for x, tile in enumerate(row):
             if tile == "@":
                 return x, y
 
 
-def choose_action(dungeon_map, key, screen) :
+def choose_action(dungeon_map: list[list[str]], key:int, screen:pg.Surface) -> None:
     global player_health, nb_potion
 
     console.info("Moving monsters...")
@@ -69,8 +69,11 @@ def choose_action(dungeon_map, key, screen) :
     pg.display.flip()
 
     if key == pg.K_ESCAPE :
-        console.info("Quitting game...")
-        exit(0)
+        choice = g.option_menu(screen)
+        if choice == "continue_game":
+            pass
+        elif choice == "save_game":
+            save(dungeon_map, screen)
     elif key in [pg.K_UP, pg.K_DOWN, pg.K_LEFT, pg.K_RIGHT, pg.K_z, pg.K_q, pg.K_s, pg.K_d] :
         p.move(dungeon_map, key, screen)
     elif key == pg.K_u :
@@ -85,8 +88,6 @@ def choose_action(dungeon_map, key, screen) :
             console.warning("No potion in inventory")
             g.draw_text(screen, "No potion in inventory", 0, 15, (255, 0, 0))
             pg.display.flip()
-    elif key == pg.K_RETURN :
-        save(dungeon_map, screen)
     else :
         console.warning("Invalid action : " + str(key))
         g.draw_text(screen, "Invalid action", 0, 15, (255, 0, 0))
@@ -100,7 +101,7 @@ def choose_action(dungeon_map, key, screen) :
     return dungeon_map
 
 
-def create_new_game(screen, difficulty=level):
+def create_new_game(screen:pg.Surface, difficulty:int=level) -> list[list[str]]:
     width = g.constant["WIDTH"] // 32
     height = g.constant["HEIGHT"] // 32
     nb_monster = random.randint(2, difficulty * 2)
@@ -115,7 +116,7 @@ def create_new_game(screen, difficulty=level):
     return dungeon_map
 
 
-def load_game(file_path):
+def load_game(file_path:str) -> list[list[str]]:
     global dungeon_map, player_health, nb_potion, monster_health, level
     with open(file_path, "r") as f:
         json_map = f.read()
@@ -131,7 +132,7 @@ def load_game(file_path):
         return dungeon_map
 
 
-def save(dungeon_map, screen):
+def save(dungeon_map: list[list[str]], screen:pg.Surface) -> None:
     with open("save.json", "w") as f:
         console.info("Saving game...")
         f.write(json.dumps({"map": dungeon_map, "player": {"health": player_health, "potions": nb_potion}, "ennemies": monster_health, "level": level}))
