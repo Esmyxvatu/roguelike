@@ -20,6 +20,14 @@ console = l.Logger("out.log", "Main processus")
 
 
 def getInfo(dungeon_map: list[list[str]]) -> str:
+    """
+    Get the health of monster next to the player
+    Args:
+        dungeon_map (list[list[str]]): dungeon map
+    Returns:
+        str: text with monster(s) health
+    """
+
     global monster_health
     text = ""
 
@@ -51,13 +59,29 @@ def getInfo(dungeon_map: list[list[str]]) -> str:
 
 
 def find_player_position(dungeon_map: list[list[str]]) -> tuple[int, int]:
+    """
+    Get the position of the player
+    Args:
+        dungeon_map (list[list[str]]): dungeon map
+    Returns:
+        tuple[int, int]: position of the player
+    """
+
     for y, row in enumerate(dungeon_map):
         for x, tile in enumerate(row):
             if tile == "@":
                 return x, y
 
 
-def run_game(screen, clock):
+def run_game(screen: pg.Surface, clock: pg.time.Clock) -> bool:
+    """
+    Main function to run the game
+    Args:
+        screen (pg.Surface): screen surface
+    Returns:
+        bool: True if the game is running
+    """
+
     # Initialisation ou réinitialisation des variables de jeu
     # dungeon_map = func.create_new_game(screen) ou autre fonction pour créer un nouveau jeu
     dungeon_map = create_new_game(screen)  # Exemple pour un nouveau jeu
@@ -91,7 +115,16 @@ def run_game(screen, clock):
     return running
 
 
-def main(screen, clock):
+def main(screen: pg.Surface, clock: pg.time.Clock) -> None:
+    """
+    Function to start the game and manage the menu
+    Args:
+        screen (pg.Surface): screen surface
+        clock (pg.time.Clock): clock
+    Returns:
+        None
+    """
+
     while True:
         # Lancer le menu principal
         menu_choice = g.main_menu(screen, clock)
@@ -119,6 +152,17 @@ def main(screen, clock):
 
 
 def choose_action(dungeon_map: list[list[str]], key:int, screen:pg.Surface, clock:pg.time.Clock) -> None:
+    """
+    Function to choose an action in the game
+    Args:
+        dungeon_map (list[list[str]]): dungeon map
+        key (int): key pressed
+        screen (pg.Surface): screen surface
+        clock (pg.time.Clock): clock
+    Returns:
+        None
+    """
+
     global player_health, nb_potion
 
     console.info("Moving monsters...")
@@ -166,6 +210,15 @@ def choose_action(dungeon_map: list[list[str]], key:int, screen:pg.Surface, cloc
 
 
 def create_new_game(screen:pg.Surface, difficulty:int=level) -> list[list[str]]:
+    """
+    Function to create a new game
+    Args:
+        screen (pg.Surface): screen surface
+        difficulty (int): difficulty level
+    Returns:
+        list[list[str]]: dungeon map
+    """
+
     width = g.constant["WIDTH"] // g.constant["TILE_SIZE"]
     height = g.constant["HEIGHT"] // g.constant["TILE_SIZE"]
     nb_monster = random.randint(2, difficulty * 2)
@@ -181,6 +234,14 @@ def create_new_game(screen:pg.Surface, difficulty:int=level) -> list[list[str]]:
 
 
 def load_game(file_path:str) -> list[list[str]]:
+    """
+    Load a game from a save file
+    Args:
+        file_path (str): save file path
+    Returns:
+        list[list[str]]: dungeon map
+    """
+
     global dungeon_map, player_health, nb_potion, monster_health, level
     with open(file_path, "r") as f:
         json_map = f.read()
@@ -197,6 +258,15 @@ def load_game(file_path:str) -> list[list[str]]:
 
 
 def save(dungeon_map: list[list[str]], screen:pg.Surface) -> None:
+    """
+    Save the game to a json file
+    Args:
+        dungeon_map (list[list[str]]): dungeon map
+        screen (pg.Surface): screen surface
+    Returns:
+        None
+    """
+
     with open("save.json", "w") as f:
         console.info("Saving game...")
         f.write(json.dumps({"map": dungeon_map, "player": {"health": player_health, "potions": nb_potion}, "ennemies": monster_health, "level": level}))

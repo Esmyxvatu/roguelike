@@ -5,6 +5,18 @@ import logger
 console = logger.Logger("out.log", "Map generator")
 
 def generate_random_map(width: int, height: int, nb_monster: int, nb_tresor: int, difficulty: int) -> list[list[str]]:
+    """
+    Function to generate a random map
+    Args:
+        width (int): width of the map
+        height (int): height of the map
+        nb_monster (int): number of monsters
+        nb_tresor (int): number of tresors
+        difficulty (int): difficulty level
+    Returns:
+        list[list[str]]: dungeon map
+    """
+
     console.info("Generating random map...")
     dungeon_map = [["#" for _ in range(width)] for _ in range(height)]
     for _ in range(5):  # Créer 5 pièces aléatoires
@@ -33,6 +45,14 @@ def generate_random_map(width: int, height: int, nb_monster: int, nb_tresor: int
 
 
 def find_open_areas(dungeon_map: list[list[str]]) -> list[tuple[int, int]]:
+    """
+    Function to find the open areas
+    Args:
+        dungeon_map (list[list[str]]): dungeon map
+    Returns:
+        list[tuple[int, int]]: list of open areas
+    """
+
     open_areas = []
     for y, row in enumerate(dungeon_map):
         for x, tile in enumerate(row):
@@ -42,6 +62,15 @@ def find_open_areas(dungeon_map: list[list[str]]) -> list[tuple[int, int]]:
 
 
 def connect_points(dungeon_map: list[list[str]], points: list[tuple[int, int]]) -> list[list[str]]:
+    """
+    Connect the points in the dungeon map
+    Args:
+        dungeon_map (list[list[str]]): dungeon map
+        points (list[tuple[int, int]]): list of points
+    Returns:
+        list[list[str]]: dungeon map
+    """
+
     for i in range(len(points) - 1):
         x1, y1 = points[i]
         x2, y2 = points[i + 1]
@@ -60,6 +89,16 @@ def connect_points(dungeon_map: list[list[str]], points: list[tuple[int, int]]) 
 
 
 def add_monster(dungeon_map: list[list[str]], nb_monster: int, difficulty: int) -> list[list[str]]:
+    """
+    Add the monster on the dungeon map
+    Args:
+        dungeon_map (list[list[str]]): dungeon map
+        nb_monster (int): number of monsters
+        difficulty (int): difficulty level
+    Returns:
+        list[list[str]]: dungeon map
+    """
+
     while count_monsters(dungeon_map) < nb_monster:
         x = random.randint(0, len(dungeon_map[0]) - 1)
         y = random.randint(0, len(dungeon_map) - 1)
@@ -75,6 +114,15 @@ def add_monster(dungeon_map: list[list[str]], nb_monster: int, difficulty: int) 
 
 
 def add_tresor(dungeon_map: list[list[str]], nb_tresor: int) -> list[list[str]]:
+    """
+    Add the tresor on the dungeon map
+    Args:
+        dungeon_map (list[list[str]]): dungeon map
+        nb_tresor (int): number of tresor
+    Returns:
+        list[list[str]]: dungeon map
+    """
+
     while count_tresor(dungeon_map) < nb_tresor:
         x = random.randint(0, len(dungeon_map[0]) - 1)
         y = random.randint(0, len(dungeon_map) - 1)
@@ -85,6 +133,13 @@ def add_tresor(dungeon_map: list[list[str]], nb_tresor: int) -> list[list[str]]:
 
 
 def count_tresor(dungeon_map: list[list[str]]) -> int:
+    """
+    Count the number of tresor
+    Args:
+        dungeon_map (list[list[str]]): the map to count
+    Returns:
+        int: number of tresor
+    """
     count = 0
     for row in dungeon_map:
         count += row.count("T")
@@ -92,6 +147,14 @@ def count_tresor(dungeon_map: list[list[str]]) -> int:
 
 
 def count_monsters(dungeon_map: list[list[str]]) -> int:
+    """
+    Count the number of monsters
+    Args:
+        dungeon_map (list[list[str]]): the map to count
+    Returns:
+        int: number of monsters
+    """
+
     count = 0
     for row in dungeon_map:
         count += row.count("M")

@@ -32,7 +32,17 @@ images = {
     "background": pygame.transform.scale(pygame.image.load("core/textures/background.png"), (constant["WIDTH"], constant["HEIGHT"]))
 }
 
+
 def main_menu(screen: pygame.Surface, clock: pygame.time.Clock = pygame.time.Clock()) -> str:
+    """
+    Displays the main menu of the game, handling user input and rendering the menu buttons and text.
+    Args:
+        screen (pygame.Surface): The surface to render the menu on.
+        clock (pygame.time.Clock): The clock to manage the game's framerate. Defaults to pygame.time.Clock().
+    Returns:
+        str: The user's selected action, either "new_game", "load_game", or None if the game is quit.
+    """
+
     last_update_time = time.time()
     while True:
         clock.tick(constant["FPS"])
@@ -99,6 +109,15 @@ def main_menu(screen: pygame.Surface, clock: pygame.time.Clock = pygame.time.Clo
 
 
 def option_menu(screen: pygame.Surface, clock: pygame.time.Clock = pygame.time.Clock()) -> str:
+    """
+    Displays an option menu with buttons to continue the game, save and quit, return home, or quit the game.
+    Parameters:
+        screen (pygame.Surface): The surface on which the menu is displayed.
+        clock (pygame.time.Clock): The clock used to control the frame rate. Defaults to pygame.time.Clock().
+    Returns:
+        str: A string indicating the user's choice, or None if the user quits the game.
+    """
+
     last_update_time = time.time()
     while True:
         clock.tick(constant["FPS"])
@@ -177,6 +196,17 @@ def option_menu(screen: pygame.Surface, clock: pygame.time.Clock = pygame.time.C
 
 
 def loading_animation(screen: pygame.Surface, message: str, duration: int = 5, clock: pygame.time.Clock = pygame.time.Clock()) -> None:
+    """
+    Displays a loading animation on the screen with a given message and duration.
+    Args:
+        screen (pygame.Surface): The surface to render the animation on.
+        message (str): The message to display during the animation.
+        duration (int): The duration of the animation in seconds. Defaults to 5.
+        clock (pygame.time.Clock): The clock to manage the game's framerate. Defaults to pygame.time.Clock().
+    Returns:
+        None
+    """
+
     start_time = time.time()
     spinner = "|/-\\"
     spinner_index = 0
@@ -212,6 +242,20 @@ def loading_animation(screen: pygame.Surface, message: str, duration: int = 5, c
 
 
 def draw_text(screen: pygame.Surface, text: str, x: int, y: int, color: tuple = (255, 255, 255), font: pygame.font.Font = font["main"], bg_color: tuple = (0, 0, 0)) -> None:
+    """
+    Draws text on the screen with a given color, font, and background color.
+    Args:
+        screen (pygame.Surface): The surface to render the text on.
+        text (str): The text to draw.
+        x (int): The x-coordinate of the text.
+        y (int): The y-coordinate of the text.
+        color (tuple, optional): The color of the text. Defaults to (255, 255, 255).
+        font (pygame.font.Font, optional): The font of the text. Defaults to font["main"].
+        bg_color (tuple, optional): The background color of the text. Defaults to (0, 0, 0).
+    Returns:
+        None
+    """
+
     if bg_color is None:
         text_surface = font.render(text, True, color)
     else :
@@ -220,6 +264,15 @@ def draw_text(screen: pygame.Surface, text: str, x: int, y: int, color: tuple = 
 
 
 def draw_map(screen: pygame.Surface, dungeon_map: list[list[str]]) -> None:
+    """
+    Draws the map on the screen.
+    Args:
+        screen (pygame.Surface): The surface to render the map on.
+        dungeon_map (list[list[str]]): The map to draw.
+    Returns:
+        None
+    """
+
     COLOR_WALL = color["wall"]
     COLOR_FLOOR = color["floor"]
     COLOR_PLAYER = color["player"]

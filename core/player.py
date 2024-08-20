@@ -9,6 +9,16 @@ import gui
 console = logger.Logger("out.log", "Player processus")
 
 def move(dungeon_map: list[list[str]], direction: int, screen: pg.Surface) -> None:
+    """
+    Function to move the player on the dungeon map
+    Args:
+        dungeon_map (list[list[str]]): dungeon map
+        direction (int): direction
+        screen (pg.Surface): screen surface
+    Returns:
+        None
+    """
+
     x, y = func.find_player_position(dungeon_map)
     new_x, new_y = x, y
 
