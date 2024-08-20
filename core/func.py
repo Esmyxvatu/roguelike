@@ -110,7 +110,7 @@ def create_new_game(screen, difficulty=level):
     g.loading_animation(screen, "Generating dungeon...")
 
     console.info("Generating random map with width={}, height={}, nb_monster={}, nb_tresor={}".format(width, height, nb_monster, nb_tresor))
-    dungeon_map = k.generate_random_map(int(width), int(height), int(nb_monster), int(nb_tresor))
+    dungeon_map = k.generate_random_map(int(width), int(height), int(nb_monster), int(nb_tresor), difficulty)
 
     return dungeon_map
 

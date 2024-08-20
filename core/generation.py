@@ -4,7 +4,7 @@ import logger
 
 console = logger.Logger("out.log", "Map generator")
 
-def generate_random_map(width, height, nb_monster, nb_tresor):
+def generate_random_map(width, height, nb_monster, nb_tresor, difficulty):
     console.info("Generating random map...")
     dungeon_map = [["#" for _ in range(width)] for _ in range(height)]
     for _ in range(5):  # Créer 5 pièces aléatoires
@@ -26,7 +26,7 @@ def generate_random_map(width, height, nb_monster, nb_tresor):
     connected = connect_points(dungeon_map, open_areas)
 
     console.info("Adding monsters and tresors...")
-    connected = add_monster(connected, nb_monster)
+    connected = add_monster(connected, nb_monster, difficulty)
     connected = add_tresor(connected, nb_tresor)
 
     return connected
@@ -59,7 +59,7 @@ def connect_points(dungeon_map, points):
     return dungeon_map
 
 
-def add_monster(dungeon_map, nb_monster):
+def add_monster(dungeon_map, nb_monster, difficulty):
     while count_monsters(dungeon_map) < nb_monster:
         x = random.randint(0, len(dungeon_map[0]) - 1)
         y = random.randint(0, len(dungeon_map) - 1)
@@ -67,8 +67,8 @@ def add_monster(dungeon_map, nb_monster):
         if dungeon_map[y][x] == ".":
             dungeon_map[y][x] = "M"
             func.monster_health[f"{x},{y}"] = {
-                "health": random.randint(5, 25),
-                "attack": random.randint(2, 8),
+                "health": random.randint(5, difficulty*10+5),
+                "attack": random.randint(2, difficulty*4),
             }
 
     return dungeon_map
