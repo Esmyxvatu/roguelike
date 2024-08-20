@@ -106,9 +106,10 @@ def option_menu(screen: pygame.Surface, clock: pygame.time.Clock = pygame.time.C
         last_update_time = logger.set_caption(clock, last_update_time, 0.25)
 
         # Créer des boutons sous forme de rectangles
-        continue_game_button = pygame.Rect(constant["WIDTH"] // 2 - 150,  constant["HEIGHT"] // 2.5 - 50, 350, 50)
+        continue_game_button = pygame.Rect(constant["WIDTH"] // 2 - 150, constant["HEIGHT"] // 2.5 - 50, 350, 50)
         save_game_button     = pygame.Rect(constant["WIDTH"] // 2 - 150, constant["HEIGHT"] // 2.5 + 20, 350, 50)
-        quit_game_button     = pygame.Rect(constant["WIDTH"] // 2 - 150, constant["HEIGHT"] // 2.5 + 100, 350, 50)
+        return_home_button   = pygame.Rect(constant["WIDTH"] // 2 - 150, constant["HEIGHT"] // 2.5 + 80, 350, 50)
+        quit_game_button     = pygame.Rect(constant["WIDTH"] // 2 - 150, constant["HEIGHT"] // 2.5 + 140, 350, 50)
 
         # Gérer les événements
         for event in pygame.event.get():
@@ -121,6 +122,8 @@ def option_menu(screen: pygame.Surface, clock: pygame.time.Clock = pygame.time.C
                     return "continue_game"
                 if save_game_button.collidepoint(event.pos):
                     return "save_game"
+                if return_home_button.collidepoint(event.pos):
+                    return "return_home"
                 if quit_game_button.collidepoint(event.pos):
                     pygame.quit()
                     sys.exit()
@@ -128,6 +131,7 @@ def option_menu(screen: pygame.Surface, clock: pygame.time.Clock = pygame.time.C
         # Dessiner les boutons
         pygame.draw.rect(screen, color["GRAY"], continue_game_button)
         pygame.draw.rect(screen, color["GRAY"], save_game_button)
+        pygame.draw.rect(screen, color["GRAY"], return_home_button)
         pygame.draw.rect(screen, color["GRAY"], quit_game_button)
 
         # Dessiner le texte sur les boutons
@@ -145,6 +149,15 @@ def option_menu(screen: pygame.Surface, clock: pygame.time.Clock = pygame.time.C
             "Sauvegarder et Quitter",
             save_game_button.x + 50,
             save_game_button.y + 10,
+            color["BLACK"],
+            font["small"],
+            color["GRAY"],
+        )
+        draw_text(
+            screen,
+            "Retour au menu",
+            return_home_button.x + 50,
+            return_home_button.y + 10,
             color["BLACK"],
             font["small"],
             color["GRAY"],

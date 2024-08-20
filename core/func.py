@@ -2,6 +2,7 @@ import time
 import json
 import pygame as pg
 import random
+import sys
 
 import player     as p
 import logger     as l
@@ -56,7 +57,68 @@ def find_player_position(dungeon_map: list[list[str]]) -> tuple[int, int]:
                 return x, y
 
 
-def choose_action(dungeon_map: list[list[str]], key:int, screen:pg.Surface) -> None:
+def run_game(screen, clock):
+    # Initialisation ou réinitialisation des variables de jeu
+    # dungeon_map = func.create_new_game(screen) ou autre fonction pour créer un nouveau jeu
+    dungeon_map = create_new_game(screen)  # Exemple pour un nouveau jeu
+
+    console.info("Starting game...")
+
+    # Effacer l'écran
+    screen.fill(g.color["WHITE"])
+
+    # Dessiner la carte
+    g.draw_map(screen, dungeon_map)
+
+    # Mettre à jour l'affichage
+    pg.display.flip()
+
+    # Boucle de jeu principale
+    last_update_time = time.time()
+    running = True
+    while running:
+        last_update_time = l.set_caption(clock, last_update_time, 0.25)
+        for event in pg.event.get():
+            if event.type == pg.QUIT:
+                running = False
+            if event.type == pg.KEYDOWN:
+                # Traiter les actions dans le jeu
+                dungeon_map = choose_action(dungeon_map, event.key, screen, clock)
+
+        clock.tick(g.constant["FPS"])
+        pg.display.flip()
+
+    return running
+
+
+def main(screen, clock):
+    while True:
+        # Lancer le menu principal
+        menu_choice = g.main_menu(screen, clock)
+
+        if menu_choice == "new_game":
+            if not run_game(screen, clock):
+                break  # Sortir si l'utilisateur souhaite quitter
+
+        elif menu_choice == "load_game":
+            file_path = input("Enter the save file path: ")
+            # Charger le jeu et lancer la boucle de jeu
+            dungeon_map = load_game(file_path)
+            console.info("Starting loaded game...")
+
+            screen.fill(g.color["BLACK"])
+            g.draw_map(screen, dungeon_map)
+            pg.display.flip()
+
+            if not run_game(screen, clock):
+                break  # Sortir si l'utilisateur souhaite quitter
+
+        elif menu_choice == "exit":
+            pg.quit()
+            sys.exit()
+
+
+def choose_action(dungeon_map: list[list[str]], key:int, screen:pg.Surface, clock:pg.time.Clock) -> None:
     global player_health, nb_potion
 
     console.info("Moving monsters...")
@@ -74,6 +136,8 @@ def choose_action(dungeon_map: list[list[str]], key:int, screen:pg.Surface) -> N
             pass
         elif choice == "save_game":
             save(dungeon_map, screen)
+        elif choice == "return_home":
+            main(screen, clock)
     elif key in [pg.K_UP, pg.K_DOWN, pg.K_LEFT, pg.K_RIGHT, pg.K_z, pg.K_q, pg.K_s, pg.K_d] :
         p.move(dungeon_map, key, screen)
     elif key == pg.K_u :
@@ -102,8 +166,8 @@ def choose_action(dungeon_map: list[list[str]], key:int, screen:pg.Surface) -> N
 
 
 def create_new_game(screen:pg.Surface, difficulty:int=level) -> list[list[str]]:
-    width = g.constant["WIDTH"] // 32
-    height = g.constant["HEIGHT"] // 32
+    width = g.constant["WIDTH"] // g.constant["TILE_SIZE"]
+    height = g.constant["HEIGHT"] // g.constant["TILE_SIZE"]
     nb_monster = random.randint(2, difficulty * 2)
     nb_tresor = max(3, int(nb_monster / 2))
 
@@ -137,7 +201,7 @@ def save(dungeon_map: list[list[str]], screen:pg.Surface) -> None:
         console.info("Saving game...")
         f.write(json.dumps({"map": dungeon_map, "player": {"health": player_health, "potions": nb_potion}, "ennemies": monster_health, "level": level}))
         console.info("Game saved to save.json")
-        g.draw_text(screen, "Game saved", 0, 15, (0, 255, 0))
+        g.draw_text(screen, "Game saved", g.constant["WIDTH"] // 2 - 100, g.constant["HEIGHT"] // 2 - 20, (0, 255, 0), g.font["big"], None)
         pg.display.flip()
         time.sleep(0.5)
         exit()
